@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('image');
             $table->string('fandom');
+            $table->unsignedBigInteger('level_id');
             $table->timestamps();
         });
     }

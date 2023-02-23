@@ -20,5 +20,6 @@ class User extends Authenticatable
         'password',
         'image',
         'fandom',
+        'level_id',
     ];
 }

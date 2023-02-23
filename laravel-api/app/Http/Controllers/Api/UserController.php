@@ -40,6 +40,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'image' => 'user.jpg',
             'fandom' => 'No Fandom',
+            'level_id'   => 2,
         ]);
 
         return new UserResource(true, 'User Created!', [
