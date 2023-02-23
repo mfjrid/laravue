@@ -27,31 +27,46 @@
                   <div class="col-md-12">
                     <label for="name" class="form-label">Your Name</label>
                     <input type="text" v-model="names" class="form-control" id="names" name="names"
-                      placeholder="Jung Yerin" autofocus>
+                      placeholder="Nama Lengkap" autofocus>
+                    <div v-if="invalid_name" class="invalid-feedback d-block">
+                      {{ invalid_name }}
+                    </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-6 mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" v-model="email" class="form-control" id="email" name="email"
-                      placeholder="email">
+                    <input type="email" v-model="email" class="form-control" id="email" name="email" placeholder="email"
+                      required>
+                    <div v-if="invalid_email" class="invalid-feedback d-block">
+                      {{ invalid_email }}
+                    </div>
                   </div>
                   <div class="col-md-6 mb-3">
                     <label for="username" class="form-label">Username</label>
                     <input type="text" v-model="username" class="form-control" id="username" name="username"
-                      placeholder="username">
+                      placeholder="username" required>
+                    <div v-if="invalid_username" class="invalid-feedback d-block">
+                      {{ invalid_username }}
+                    </div>
                   </div>
                 </div>
                 <div class="row">
                   <div class="col-md-6 mb-4">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" v-model="password" class="form-control" id="password" name="password"
-                      placeholder="password">
+                      placeholder="password" required>
+                    <div class="invalid-feedback d-block">
+                      <!-- {{ invalid_password }} -->
+                    </div>
                   </div>
                   <div class="col-md-6 mb-4">
                     <label for="confirm_password" class="form-label">Confirm Password</label>
                     <input type="password" class=" form-control" id="confirm_password" name="confirm_password"
-                      placeholder="re-type password">
+                      placeholder="re-type password" required>
+                    <div class="invalid-feedback d-block">
+                      Please choose a username.
+                    </div>
                   </div>
                 </div>
                 <div class="d-grid">
@@ -81,6 +96,10 @@
         email: null,
         username: null,
         password: null,
+        invalid_name: null,
+        invalid_email: null,
+        invalid_username: null,
+        // invalid_password: null,
       }
     },
 
@@ -98,7 +117,6 @@
           }
         })
           .then(function (response) {
-            console.log(response.data);
             Swal.fire(
               'Account Created!',
               "You'll be redirected to login page",
@@ -108,7 +126,22 @@
             });
           })
           .catch(function (error) {
-            console.log(error);
+            Swal.fire(
+              'Error!',
+              error.response.data.name[0],
+              'error'
+            )
+            invalid_name: null;
+            if (error.response.data.name[0]) {
+              invalid_name: error.response.data.name[0]
+            }
+            // invalid_name: error.response.data.name[0];
+            // invalid_email: error.response.data.email[0];
+            // invalid_username: error.response.data.username[0];
+            // invalid_password: error.response.data.password[0];
+            // if (invalid_name) {
+            //   invalid_name: true
+            // }
           });
       }
     }
