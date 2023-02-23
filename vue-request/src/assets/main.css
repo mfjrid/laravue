@@ -79,3 +79,20 @@ a {
 a:hover {
     text-decoration: underline !important;
 }
+
+.swal2-popup {
+    border-radius: 0 !important;
+    border: 7px solid #131517;
+}
+
+.swal2-styled {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.swal2-confirm {
+    background-color: #FF6F00 !important;
+    color: #000000 !important;
+    padding: 10px 30px !important;
+}

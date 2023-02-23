@@ -3,55 +3,75 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\User;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
     public function index()
     {
         $users = User::latest()->paginate(50);
-        return new UserResource(true, 'List Data Users', $users);
+        return new UserResource(true, 'Users List', $users);
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'image'     => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'title'     => 'required',
-            'content'   => 'required',
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'username' => 'required|unique:users',
+            'password' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        $image = $request->file('image');
-        $image->storeAs('public/users', $image->hashName());
-
         $user = User::create([
-            'image'     => $image->hashName(),
-            'title'     => $request->title,
-            'content'   => $request->content,
+            'uuid' => Str::uuid(),
+            'name' => $request->name,
+            'email' => $request->email,
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+            'image' => 'user.jpg',
+            'fandom' => 'No Fandom',
         ]);
 
-        return new UserResource(true, 'Data User Berhasil Ditambahkan!', $user);
+        return new UserResource(true, 'User Created!', [
+            'name' => $user->name,
+            'email' => $user->email,
+            'username' => $user->username,
+            'created_at' => $user->created_at,
+        ]);
     }
 
     public function show(User $user)
     {
-        $user->name = $user->id;
-        return new UserResource(true, 'Data User Ditemukan!', $user->name, $user->id);
+        return new UserResource(true, 'User Found!', [
+            'uuid' => $user->uuid,
+            'name' => $user->name,
+            'email' => $user->email,
+            'username' => $user->username,
+            'image' => $user->image,
+            'fandom' => $user->fandom,
+            'created_at' => $user->created_at,
+            'updated_at' => $user->updated_at,
+        ]);
     }
 
     public function update(Request $request, User $user)
     {
         $validator = Validator::make($request->all(), [
-            'title'     => 'required',
-            'content'   => 'required',
+            'name'     => 'required',
+            'email'     => 'required|unique:users',
+            'username'     => 'required|unique:users',
+            'password'     => 'required',
+            'image'     => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -66,25 +86,39 @@ class UserController extends Controller
             Storage::delete('public/users/' . $user->image);
 
             $user->update([
+                'name'     => $request->name,
+                'email'   => $request->email,
+                'username'   => $request->username,
+                'password'   => Hash::make($request->password),
                 'image'     => $image->hashName(),
-                'title'     => $request->title,
-                'content'   => $request->content,
+                'fandom'   => $request->fandom,
             ]);
         } else {
-
             $user->update([
-                'title'     => $request->title,
-                'content'   => $request->content,
+                'name'     => $request->name,
+                'email'   => $request->email,
+                'username'   => $request->username,
+                'password'   => Hash::make($request->password),
+                'fandom'   => $request->fandom,
             ]);
         }
 
-        return new UserResource(true, 'Data User Berhasil Diubah!', $user);
+        return new UserResource(true, 'User Updated!', [
+            'uuid' => $user->uuid,
+            'name' => $user->name,
+            'email' => $user->email,
+            'username' => $user->username,
+            'image' => $user->image,
+            'fandom' => $user->fandom,
+            'created_at' => $user->created_at,
+            'updated_at' => $user->updated_at,
+        ]);
     }
 
     public function destroy(User $user)
     {
         Storage::delete('public/users/' . $user->image);
         $user->delete();
-        return new UserResource(true, 'Data User Berhasil Dihapus!', null);
+        return new UserResource(true, 'User deleted!', null);
     }
 }
