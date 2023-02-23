@@ -15,7 +15,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::latest()->paginate(50);
+        $users = User::latest()->paginate(50, ['id', 'uuid', 'name', 'email', 'username', 'image', 'fandom']);
         return new UserResource(true, 'Users List', $users);
     }
 
