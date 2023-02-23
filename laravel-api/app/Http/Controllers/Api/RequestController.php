@@ -26,39 +26,42 @@ class RequestController extends Controller
             'quality_id' => 'required',
             'link' => 'required',
             'user_id' => 'required',
+            'status_id' => 'required',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors(), 422);
         }
 
-        $user = Request::create([
+        $request = Request::create([
             'uuid' => Str::uuid(),
             'category_id' => $request->category_id,
             'quality_id' => $request->quality_id,
             'link' => $request->link,
-            'user_id'   => $request->user_id
+            'user_id'   => $request->user_id,
+            'status_id'   => $request->status_id
         ]);
 
         return new RequestResource(true, 'Request Created!', [
-            'category_id' => $user->category_id,
-            'quality_id' => $user->quality_id,
-            'link' => $user->link,
-            'user_id' => $user->user_id,
-            'created_at' => $user->created_at,
+            'category_id' => $request->category_id,
+            'quality_id' => $request->quality_id,
+            'link' => $request->link,
+            'user_id' => $request->user_id,
+            'status_id' => $request->status_id,
+            'created_at' => $request->created_at,
         ]);
     }
 
-    public function show(Req $user)
+    public function show(Req $request)
     {
         return new RequestResource(true, 'Request Found!', [
-            'uuid' => $user->uuid,
-            'category_id' => $user->category_id,
-            'quality_id' => $user->quality_id,
-            'link' => $user->link,
-            'user_id' => $user->user_id,
-            'created_at' => $user->created_at,
-            'updated_at' => $user->updated_at,
+            'uuid' => $request->uuid,
+            'category_id' => $request->category_id,
+            'quality_id' => $request->quality_id,
+            'link' => $request->link,
+            'user_id' => $request->user_id,
+            'created_at' => $request->created_at,
+            'updated_at' => $request->updated_at,
         ]);
     }
 

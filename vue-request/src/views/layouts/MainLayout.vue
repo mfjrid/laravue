@@ -14,12 +14,18 @@
                             <router-link class="nav-link" to="/">Home</router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link class="nav-link" to="/create">Form</router-link>
+                            <router-link class="nav-link" to="/create">New Request</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link class="nav-link" to="/progress">Progress</router-link>
                         </li>
                     </ul>
                     <form class="d-flex" role="search">
                         <div class="me-2">
-                            <router-link class="nav-link" to="/login">Login | Register</router-link>
+                            <router-link class="nav-link" to="/login">Login</router-link>
+                        </div>
+                        <div class="me-2">
+                            <router-link class="nav-link" to="/register">Register</router-link>
                         </div>
                     </form>
                 </div>

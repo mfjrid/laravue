@@ -18,6 +18,27 @@ const router = createRouter({
       ]
     },
     {
+      path: '/',
+      component: () => import('../views/layouts/MainLayout.vue'),
+      children: [
+        { path: 'progress', component: () => import('../views/ProgressView.vue') }
+      ]
+    },
+    {
+      path: '/',
+      component: () => import('../views/layouts/MainLayout.vue'),
+      children: [
+        { path: 'me/requests', component: () => import('../views/me/RequestsView.vue') }
+      ]
+    },
+    {
+      path: '/',
+      component: () => import('../views/layouts/MainLayout.vue'),
+      children: [
+        { path: 'me/profile', component: () => import('../views/me/ProfileView.vue') }
+      ]
+    },
+    {
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue')

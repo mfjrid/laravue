@@ -19,5 +19,6 @@ class Request extends Authenticatable
         'link',
         'message',
         'user_id',
+        'status_id',
     ];
 }
