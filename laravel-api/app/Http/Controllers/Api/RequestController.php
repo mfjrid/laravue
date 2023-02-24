@@ -38,6 +38,7 @@ class RequestController extends Controller
             'category_id' => $request->category_id,
             'quality_id' => $request->quality_id,
             'link' => $request->link,
+            'message' => $request->message,
             'user_id'   => $request->user_id,
             'status_id'   => $request->status_id
         ]);
