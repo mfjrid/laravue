@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
+const isUserLoggedIn = false;
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -7,15 +9,26 @@ const router = createRouter({
       path: '/',
       component: () => import('../views/layouts/MainLayout.vue'),
       children: [
-        { path: '', component: () => import('../views/HomeView.vue') }
+        {
+          path: '',
+          component: () => import('../views/HomeView.vue'),
+          name: 'home',
+        }
       ]
     },
     {
       path: '/',
+      name: 'create',
       component: () => import('../views/layouts/MainLayout.vue'),
       children: [
-        { path: 'create', component: () => import('../views/CreateView.vue') }
-      ]
+        {
+          path: 'create',
+          component: () => import('../views/CreateView.vue'),
+          meta: {
+            needsAuth: true,
+          }
+        }
+      ],
     },
     {
       path: '/',
@@ -49,6 +62,18 @@ const router = createRouter({
       component: () => import('../views/RegisterView.vue')
     },
   ]
+})
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.needsAuth) {
+    if (isUserLoggedIn) {
+      next();
+    } else {
+      next('/login')
+    }
+  } else {
+    next();
+  }
 })
 
 export default router

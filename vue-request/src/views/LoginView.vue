@@ -21,7 +21,7 @@
                 <h3 class="fw-bold">Account Login</h3>
                 <p>Login to access our feature.</p>
               </div>
-              <form class="mb-4">
+              <form class="mb-4" @submit="login" method="post">
                 <div class="mb-3">
                   <label for="username" class="form-label">Username</label>
                   <input v-model="username" type="text" class="form-control" id="username" name="username"
@@ -42,7 +42,6 @@
                 or <router-link to="/">Back to Home</router-link>.
               </div>
             </div>
-            coba git
           </div>
         </div>
       </div>
@@ -51,6 +50,9 @@
 </template>
 
 <script>
+  import axios from 'axios'
+  import Swal from 'sweetalert2/dist/sweetalert2.js';
+
   export default {
     data() {
       return {
@@ -58,6 +60,43 @@
         password: null,
       }
     },
+    methods: {
+      login() {
+        let self = this;
+        axios({
+          method: 'post',
+          url: 'http://localhost:8000/v1/users/login',
+          data: {
+            username: username.value,
+            password: password.value,
+          }
+        })
+          .then(function (response) {
+            Swal.fire(
+              'Login granted!',
+              "You'll be redirected to home page",
+              'success'
+            ).then(function () {
+              localStorage.setItem('userData', this.response)
+              self.$router.push('home')
+            });
+          })
+          .catch(function (error) {
+            Swal.fire(
+              'Error!',
+              error.response.data,
+              'error'
+            )
+          });
+      }
+
+    },
+    // mounted() {
+    //   let userData = localStorage.getItem('userData');
+    //   if (userData) {
+    //     this.$router.push({ name: 'home' })
+    //   }
+    // }
   }
 </script>
 

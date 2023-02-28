@@ -122,4 +122,21 @@ class UserController extends Controller
         $user->delete();
         return new UserResource(true, 'User deleted!', null);
     }
+
+    public function login(Request $request, User $user)
+    {
+        $validator = Validator::make($user->all(), [
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        return new UserResource(true, 'User granted!', [
+            'username' => $user->username,
+            'password' => $user->password,
+        ]);
+    }
 }

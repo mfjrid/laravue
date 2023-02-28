@@ -16,3 +16,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::apiResource('/requests', App\Http\Controllers\Api\RequestController::class);
 Route::apiResource('/users', App\Http\Controllers\Api\UserController::class);
+Route::post('/users/login', [App\Http\Controllers\Api\UserController::class, 'login']);
