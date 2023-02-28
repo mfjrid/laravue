@@ -24,15 +24,17 @@
               <form class="mb-4">
                 <div class="mb-3">
                   <label for="username" class="form-label">Username</label>
-                  <input type="email" class="form-control" id="username" name="username" placeholder="username"
-                    autofocus>
+                  <input v-model="username" type="text" class="form-control" id="username" name="username"
+                    placeholder="username" autofocus>
                 </div>
                 <div class="mb-4">
                   <label for="password" class="form-label">Password</label>
-                  <input type="password" class="form-control" id="password" name="password" placeholder="password">
+                  <input v-model="password" type="password" class="form-control" id="password" name="password"
+                    placeholder="password">
                 </div>
                 <div class="d-grid">
-                  <button type="submit" class="btn btn-primary d-block">Login</button>
+                  <button type="submit" class="btn btn-primary d-block"
+                    :disabled="!username || !password">Login</button>
                 </div>
               </form>
               <div class="text-small text-center">
@@ -49,14 +51,20 @@
 </template>
 
 <script>
-
+  export default {
+    data() {
+      return {
+        username: null,
+        password: null,
+      }
+    },
+  }
 </script>
 
 <style scoped>
   .container-fluid {
     min-height: 100vh;
     background-color: #191B1D;
-    /* background-image: url('https://www.toptal.com/designers/subtlepatterns/uploads/prism.png'); */
   }
 
   .quotes {

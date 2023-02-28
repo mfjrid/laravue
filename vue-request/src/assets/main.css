@@ -67,6 +67,10 @@ input:-webkit-autofill {
     background-color: #df6204 !important;
 }
 
+.btn-primary:disabled {
+    background-color: #f38938 !important;
+}
+
 .text-small {
     font-size: 0.8em;
 }
