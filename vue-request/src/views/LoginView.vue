@@ -21,11 +21,11 @@
                 <h3 class="fw-bold">Account Login</h3>
                 <p>Login to access our feature.</p>
               </div>
-              <form class="mb-4" @submit="login" method="post">
+              <form class="mb-4" @submit.prevent="handleLogin" method="post">
                 <div class="mb-3">
-                  <label for="username" class="form-label">Username</label>
-                  <input v-model="username" type="text" class="form-control" id="username" name="username"
-                    placeholder="username" autofocus>
+                  <label for="email" class="form-label">Email</label>
+                  <input v-model="email" type="email" class="form-control" id="email" name="email" placeholder="email"
+                    autofocus>
                 </div>
                 <div class="mb-4">
                   <label for="password" class="form-label">Password</label>
@@ -33,8 +33,7 @@
                     placeholder="password">
                 </div>
                 <div class="d-grid">
-                  <button type="submit" class="btn btn-primary d-block"
-                    :disabled="!username || !password">Login</button>
+                  <button type="submit" class="btn btn-primary d-block">Login</button>
                 </div>
               </form>
               <div class="text-small text-center">
@@ -49,55 +48,73 @@
   </div>
 </template>
 
-<script>
+<script setup>
+  import { ref } from 'vue';
   import axios from 'axios'
+  import { useRouter } from 'vue-router'
   import Swal from 'sweetalert2/dist/sweetalert2.js';
 
-  export default {
-    data() {
-      return {
-        username: null,
-        password: null,
-      }
-    },
-    methods: {
-      login() {
-        let self = this;
-        axios({
-          method: 'post',
-          url: 'http://localhost:8000/v1/users/login',
-          data: {
-            username: username.value,
-            password: password.value,
-          }
-        })
-          .then(function (response) {
-            Swal.fire(
-              'Login granted!',
-              "You'll be redirected to home page",
-              'success'
-            ).then(function () {
-              localStorage.setItem('userData', this.response)
-              self.$router.push('home')
-            });
-          })
-          .catch(function (error) {
-            Swal.fire(
-              'Error!',
-              error.response.data,
-              'error'
-            )
-          });
-      }
+  const router = useRouter();
 
-    },
-    // mounted() {
-    //   let userData = localStorage.getItem('userData');
-    //   if (userData) {
-    //     this.$router.push({ name: 'home' })
-    //   }
-    // }
+  const form = ref({
+    email: '',
+    password: '',
+  })
+
+  const handleLogin = async () => {
+    await axios.post('http://localhost:8000/login', {
+      _token: '{{ csrf_token() }}',
+      email: 'mfjr48@gmail.com',
+      password: '$2a$12$LMbw.EKv9KkdcfVBn6jQOuBbO5BbCKBFb96DGz1eaSdVrjhr3FNYG',
+    });
+    router.push('/')
   }
+
+  // export default {
+  //   data() {
+  //     return {
+  //       email: null,
+  //       password: null,
+  //     }
+  //   },
+  //   methods: {
+  //     login() {
+  //       let self = this;
+  //       axios({
+  //         method: 'post',
+  //         url: 'http://localhost:8000/v1/users/login',
+  //         data: {
+  //           email: email.value,
+  //           password: password.value,
+  //         }
+  //       })
+  //         .then(function (response) {
+  //           Swal.fire(
+  //             'Login granted!',
+  //             "You'll be redirected to home page",
+  //             'success'
+  //           ).then(function () {
+  //             localStorage.setItem('userData', this.response)
+  //             self.$router.push('home')
+  //           });
+  //         })
+  //         .catch(function (error) {
+  //           Swal.fire(
+  //             'Error!',
+  //             error.response.data,
+  //             'error'
+  //           )
+  //         });
+  //     }
+
+  //   },
+  //   // mounted() {
+  //   //   let userData = localStorage.getItem('userData');
+  //   //   if (userData) {
+  //   //     this.$router.push({ name: 'home' })
+  //   //   }
+  //   // }
+  // }
 </script>
 
 <style scoped>

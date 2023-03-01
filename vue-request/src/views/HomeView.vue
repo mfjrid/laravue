@@ -11,6 +11,9 @@
       </div>
     </div>
 
+    <h1>{{ user?.name }}</h1>
+    <h1>{{ user?.email }}</h1>
+
     <div class="row mt-5 pt-md-5">
       <table class="table table-striped table-dark table-bordered">
         <thead>
@@ -50,25 +53,35 @@
   </div>
 </template>
 
-<script>
-  export default {
-    data() {
-      return {
-        users: null,
-        function() {
-          axios.get('https://jsonplaceholder.typicode.com/users')
-            .then(response => {
-              this.users = response.data;
-              console.log(response);
-            })
-            .catch(error => {
-              // handle error
-              console.log(error);
-            })
-        }
-      }
-    },
-  }
+<script setup>
+  import { ref, onMounted } from 'vue';
+  import axios from 'axios';
+
+  const user = ref();
+  onMounted(async () => {
+    const data = await axios.get('/v1/users');
+    console.log(data)
+  })
+
+  // export default {
+  //   data() {
+  //     return {
+  //       users: null,
+  //       function() {
+  //         axios.get('https://jsonplaceholder.typicode.com/users')
+  //           .then(response => {
+  //             this.users = response.data;
+  //             console.log(response);
+  //           })
+  //           .catch(error => {
+  //             // handle error
+  //             console.log(error);
+  //           })
+  //       }
+  //     }
+  //   },
+  // }
+
 </script>
 
 <style>
